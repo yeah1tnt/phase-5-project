@@ -25,4 +25,10 @@ flask db revision --autogenerate -m"message"
 flask db upgrade
 ```
 
+4 - Worked on Frontend, needed to install router-dom due to error at homepage. cd into clients to install or --prefix client at end
+```
+npm install react-router-dom
+```
+
+5 - Worked on Signup page. Write user/password form. 
 </details>

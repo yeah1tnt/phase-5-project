@@ -7,8 +7,6 @@ import Home from './Home';
 import SignUp from './SignUp';
 
 function App() {
-    const [user, setUser] = useState(null);
-
 
     return (
         <Router>
