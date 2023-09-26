@@ -21,9 +21,9 @@ class Signup(Resource):
             db.session.commit()
 
             session['user_id'] = user.id
-            return {'message': 'User created'}, 201
+            return user.to_dict(), 201
 
-api.add_resource(Signup, '/signup')
+api.add_resource(Signup, '/signup', endpoint='signup')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
