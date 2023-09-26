@@ -10,8 +10,10 @@ def index():
 
 class Signup(Resource):
     def post(self):
-        username = request.form['username']
-        password = request.form['password']
+        data = request.get_json()
+
+        username = data.get('username')
+        password = data.get('password')
 
         if username and password:
             user = User(username=username)
