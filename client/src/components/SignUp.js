@@ -8,6 +8,7 @@ function SignUp ({setUser}){
 
     function handleSubmit(e){
         e.preventDefault();
+
         fetch('/signup', {
             method: 'POST',
             headers: {
@@ -36,7 +37,7 @@ function SignUp ({setUser}){
                     id='username'
                     type='text'
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value.toLowerCase())}
                 />
                 <br></br>
                 <label htmlFor='password'>Password</label>&nbsp;
