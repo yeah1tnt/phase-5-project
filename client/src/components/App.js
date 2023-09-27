@@ -4,9 +4,24 @@ import '../App.css';
 
 
 import Home from './Home';
+import Login from './Login';
 import SignUp from './SignUp';
 
+
 function App() {
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        fetch('/check_session').then((r) => {
+            if (r.ok) {
+                r.json().then((user) => {
+                    if (user.id) {
+                        setUser(user);
+                      }
+                })
+            }
+    })},[]);
 
     return (
         <Router>
@@ -15,10 +30,10 @@ function App() {
                 <Link to='/'><button>Home</button></Link>
                 <Link to='/signup'><button>Sign Up</button></Link>
             </nav>
-
             <Routes>
-                <Route exact path='/' element={<Home />} />
-                <Route exact path='/signup' element={<SignUp />} />
+                <Route exact path='/' element={<Home user={user} setUser={setUser}/>} />
+                <Route exact path='/signup' element={<SignUp setUser={setUser}/>} />
+                <Route exact path='/login' element={<Login setUser={setUser}/>} />
             </Routes>
 
         </div>

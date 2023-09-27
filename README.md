@@ -45,4 +45,18 @@ Added delete all user for seed.py
 />
 
 ```
+
+7 - Working on Login, logout and checksession. Login is put into home, if user is not logged in, Login page will be present. The user has to log in with the correct log in to continue. When sucessfully log in, it will welcome the user and a log out button will be present.
+
+```python
+if (user) {
+        return (
+            <div><h2>Welcome {user.username}</h2>
+            <button onClick={handleLogout}>Logout</button>
+            </div>
+        )
+    }else{
+        return <Login setUser={setUser}></Login>
+    }
+```
 </details>
