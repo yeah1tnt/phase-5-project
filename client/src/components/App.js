@@ -26,10 +26,11 @@ function App() {
     return (
         <Router>
         <div className='App'>
-            <nav>
-                <Link to='/'><button>Home</button></Link>
-                <Link to='/signup'><button>Sign Up</button></Link>
-            </nav>
+            
+            <Link to='/'><button>Home</button></Link>
+            {user ? 'placeholder for Games' : <Link to='/signup'><button>Signup</button></Link>}            
+            
+            
             <Routes>
                 <Route exact path='/' element={<Home user={user} setUser={setUser}/>} />
                 <Route exact path='/signup' element={<SignUp setUser={setUser}/>} />
