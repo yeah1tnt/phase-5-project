@@ -6,7 +6,7 @@ import '../App.css';
 import Home from './Home';
 import Login from './Login';
 import SignUp from './SignUp';
-
+import Character from './Character';
 
 function App() {
 
@@ -28,13 +28,14 @@ function App() {
         <div className='App'>
             
             <Link to='/'><button>Home</button></Link>
-            {user ? 'placeholder for Games' : <Link to='/signup'><button>Signup</button></Link>}            
+            {user ? <Link to='/character'><button>Create Your Character</button></Link> : <Link to='/signup'><button>Signup</button></Link>}            
             
             
             <Routes>
                 <Route exact path='/' element={<Home user={user} setUser={setUser}/>} />
                 <Route exact path='/signup' element={<SignUp setUser={setUser}/>} />
                 <Route exact path='/login' element={<Login setUser={setUser}/>} />
+                <Route exact path='/character' element={<Character user={user} setUser={setUser}/>} />
             </Routes>
 
         </div>

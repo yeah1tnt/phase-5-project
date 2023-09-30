@@ -45,5 +45,19 @@ class Character(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'job': self.job,
+            'exp': self.exp,
+            'level': self.level,
+            'str': self.str,
+            'agi': self.agi,
+            'vit': self.vit,
+            'int': self.int,
+            'dex': self.dex
+        }
+    
     def __repr__(self):
         return '<Character {}>'.format(self.name)

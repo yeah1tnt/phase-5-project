@@ -59,4 +59,21 @@ if (user) {
         return <Login setUser={setUser}></Login>
     }
 ```
+
+8 - Set up character database and create Character.js for character creation. Hardest part was the button, tried to make every 5+ stat consume 2 pts, but unable to get the logic right. Gave up for the night and decided with this. Button increase stat, set stat and form will submit all values when they are ready. None of value can be null.
+```python
+    const increaseStat = (stat, setStat) => {
+        if (points > 0) {
+          setStat((prev) => prev + 1);
+          setPoints((prev) => prev - 1);
+        }
+    };
+    
+      const decreaseStat = (stat, setStat) => {
+        if (stat > 1) {
+          setStat((prev) => prev - 1);
+          setPoints((prev) => prev + 1);
+        }
+    };
+```
 </details>

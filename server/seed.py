@@ -1,4 +1,4 @@
-from models import db, User
+from models import db, User, Character
 from faker import Faker
 from app import app
 
@@ -8,5 +8,6 @@ with app.app_context():
 
     print('Delete all users')
     User.query.delete()
+    Character.query.delete()
     db.session.commit()
     print('Completed')
