@@ -45,6 +45,9 @@ class Character(db.Model, SerializerMixin):
     job = db.Column(db.String, nullable=False)
     exp = db.Column(db.Integer, nullable=False)
     level = db.Column(db.Integer, nullable=False)
+    hp = db.Column(db.Integer, nullable=False)
+    atk = db.Column(db.Integer, nullable=False)
+    _def = db.Column(db.Integer, nullable=False)
     str = db.Column(db.Integer, nullable=False)
     agi = db.Column(db.Integer, nullable=False)
     vit = db.Column(db.Integer, nullable=False)
@@ -53,6 +56,7 @@ class Character(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -60,6 +64,9 @@ class Character(db.Model, SerializerMixin):
             'job': self.job,
             'exp': self.exp,
             'level': self.level,
+            'hp': self.hp,
+            'atk': self.atk,
+            'def': self._def,
             'str': self.str,
             'agi': self.agi,
             'vit': self.vit,
@@ -70,3 +77,50 @@ class Character(db.Model, SerializerMixin):
     
     def __repr__(self):
         return '<Character {}>'.format(self.name)
+
+class Dungeon(db.Model, SerializerMixin):
+    __tablename__ = 'dungeons'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    level = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.String, nullable=False)
+
+    monsters = db.relationship('Monster', backref='dungeons')
+
+    def __repr__(self):
+        return '<Dungeon {}>'.format(self.name)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'level': self.level
+        }
+    
+class Monster(db.Model, SerializerMixin):
+    __tablename__ = 'monsters'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    type = db.Column(db.String, nullable=False)
+    exp = db.Column(db.Integer, nullable=False)
+    hp = db.Column(db.Integer, nullable=False)
+    atk = db.Column(db.Integer, nullable=False)
+    def_ = db.Column(db.Integer, nullable=False)
+
+    dungeon_type = db.Column(db.String, db.ForeignKey('dungeons.type'))
+
+    def __repr__(self):
+        return '<Monster {}>'.format(self.name)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'type': self.type,
+            'exp': self.exp,
+            'hp': self.hp,
+            'atk': self.atk,
+            'def': self.def_
+        }

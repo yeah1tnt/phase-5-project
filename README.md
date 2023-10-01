@@ -83,4 +83,6 @@ Made CharacterList, but for some reason it was pulling /character/ from port 400
 Created delete function to delete existing character.
 Tested different users, users that has no character caused an error with character.map, made condition to ask user to create their character first.
 
+
+10 - Making dungeon, monster, and updated character models. Seed.py updated to generate random dungeon and monster.
 </details>

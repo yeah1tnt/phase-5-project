@@ -48,11 +48,12 @@ function CharacterList({user}){
                 (<ul>
                     {characters.map((character) => (
                         <p key={character.id}>
-                            {character.name} <button onClick={() => deleteCharacter(character.id)}>Delete</button>
+                            {character.name} 
+                            <button>Start Game</button>
+                            <button onClick={() => deleteCharacter(character.id)}>Delete</button>
                         </p>
                     ))}
                 </ul>): <p>You have no characters. Please create one</p>}
-            {message}
         </div>
         )
 }
