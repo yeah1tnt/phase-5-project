@@ -57,7 +57,20 @@ class Logout(Resource):
         session['user_id'] = None
         return {'message': 'Logged out'}, 200
     
-class CharacterAdd(Resource):
+class CharacterOption(Resource):
+
+    def get(self):
+        if not session['user_id']:
+            return {'message': 'Not authorized'}, 401
+        user_id = session['user_id']
+        character = Character.query.filter_by(user_id=user_id).all()
+        if not character:
+            return {'message': 'No characters found'}, 404
+
+        character_dict = [character.to_dict() for character in character]
+        print(character_dict)
+        return character_dict, 200
+    
     def post(self):
         data = request.get_json()
 
@@ -78,11 +91,28 @@ class CharacterAdd(Resource):
 
         return character_dict, 201
 
+class CharacterDelete(Resource):
+    def delete(self, character_id):
+        character = Character.query.filter_by(id=character_id).first()
+        if not character:
+            return {'message': 'Character not found'}, 404
+        
+        if character.user_id == session['user_id']:
+            db.session.delete(character)
+            db.session.commit()
+            return {'message': 'Character deleted'}, 200
+        else:
+            return {'message': 'Not authorized'}, 401
+
+
+
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
-api.add_resource(CharacterAdd, '/character', endpoint='character')
+api.add_resource(CharacterOption, '/character', endpoint='character')
+api.add_resource(CharacterDelete, '/character/<int:character_id>', endpoint='character_delete')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

@@ -76,4 +76,11 @@ if (user) {
         }
     };
 ```
+
+9 - Now that the character is created. I want to make a list of character created by the logged in character, and give them the option to delete them/choose them for the game.
+
+Made CharacterList, but for some reason it was pulling /character/ from port 4000 instead of 5555. After hours of troubleshooting and changing code. found that ```fetch('/character')``` and ```fetch(/character/) ``` are 2 different things.
+Created delete function to delete existing character.
+Tested different users, users that has no character caused an error with character.map, made condition to ask user to create their character first.
+
 </details>

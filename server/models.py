@@ -25,10 +25,18 @@ class User(db.Model, SerializerMixin):
 
     def authenticate(self, password):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
-
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'password_hash': self._password_hash
+        }
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+    
+
     
 class Character(db.Model, SerializerMixin):
     __tablename__ = 'characters'
@@ -56,7 +64,8 @@ class Character(db.Model, SerializerMixin):
             'agi': self.agi,
             'vit': self.vit,
             'int': self.int,
-            'dex': self.dex
+            'dex': self.dex,
+            'user_id': self.user_id
         }
     
     def __repr__(self):
