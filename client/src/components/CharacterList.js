@@ -41,31 +41,20 @@ function CharacterList({user}){
             setMessage(error.message)
         })
     }
-
-    if(!user) {
-        return (
-            <div>
-                <h1>Your Characters</h1>
-                <ul>
+    return (
+        <div>
+            <h1>Your Characters</h1>
+            {characters.length > 0 ?
+                (<ul>
                     {characters.map((character) => (
                         <p key={character.id}>
                             {character.name} <button onClick={() => deleteCharacter(character.id)}>Delete</button>
                         </p>
                     ))}
-                </ul>
-                {message}
-
-            </div>
+                </ul>): <p>You have no characters. Please create one</p>}
+            {message}
+        </div>
         )
-    }else{
-        return (
-            <div>
-                <h1>Your Characters</h1>
-                <p>You don't have a character, please create one</p>
-            </div>
-        )
-
-    }
 }
 
 export default CharacterList
