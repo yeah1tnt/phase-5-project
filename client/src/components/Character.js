@@ -8,9 +8,9 @@ function Character({user, setUser}){
     const [job, setJob] = useState('Warrior');
     const exp = 0;
     const level = 1;
-    const [hp, setHp] = useState(10);
-    const [atk, setAtk] = useState(1);
-    const [_def, setDef] = useState(1);
+    // const [hp, setHp] = useState(10);
+    // const [atk, setAtk] = useState(1);
+    // const [_def, setDef] = useState(1);
     const [str, setStr] = useState(1);
     const [agi, setAgi] = useState(1);
     const [vit, setVit] = useState(1);
@@ -35,38 +35,9 @@ function Character({user, setUser}){
         }
     };
     function handleSubmit(e){
-        e.preventDefault();
+        e.preventDefault();      
 
-        if(job === 'Warrior'){
-            setHp(hp+(1.5*str)+(1.2*agi)+(2*vit)+(1*int)+(1.5*dex))
-            setAtk(atk+(2*str)+(1.2*agi)+(1*vit)+(1*int)+(1.5*dex))
-            setDef(_def+(2*str)+(1.5*agi)+(1.5*vit)+(1.5*int)+(1*dex))
-        }
-
-        if(job === 'Assassin'){
-            setHp(hp+(1.2*str)+(1.5*agi)+(2*vit)+(1*int)+(1.2*dex))
-            setAtk(atk+(1.5*str)+(2*agi)+(1*vit)+(1*int)+(1.5*dex))
-            setDef(_def+(1.5*str)+(2*agi)+(1.5*vit)+(1.5*int)+(1*dex))
-        }
-
-        if(job === 'Paladin'){
-            setHp(hp+(1.5*str)+(1.5*agi)+(2.5*vit)+(1*int)+(1*dex))
-            setAtk(atk+(1.5*str)+(2*agi)+(2*vit)+(1.2*int)+(1*dex))
-            setDef(_def+(1.5*str)+(2*agi)+(2*vit)+(1.5*int)+(1*dex))
-        }
-        
-        if(job === 'Mage'){
-            setHp(hp+(1*str)+(1.5*agi)+(2*vit)+(1*int)+(1.5*dex))
-            setAtk(atk+(1*str)+(1*agi)+(1*vit)+(2*int)+(2*dex))
-            setDef(_def+(1.5*str)+(1.5*agi)+(2*vit)+(2*int)+(1*dex))
-        }
-
-        if(job === 'Hunter'){
-            setHp(hp+(1.5*str)+(1.5*agi)+(2*vit)+(1*int)+(1.5*dex))
-            setAtk(atk+(1.5*str)+(2*agi)+(1*vit)+(2*int)+(1.5*dex))
-            setDef(_def+(1.5*vit)+(2*agi)+(2*int)+(1.5*int)+(1*dex))
-        }
-        const characterData = {name, job, exp, level, hp, atk, _def, str, agi, vit, int, dex, user_id: user.id};
+        let characterData = {name, job, exp, level, str, agi, vit, int, dex, user_id: user.id};
 
         fetch('/character', {
             method: 'POST',
@@ -76,8 +47,9 @@ function Character({user, setUser}){
             body: JSON.stringify(characterData)
         }).then((r) => {
             if (r.ok) {
-                r.json().then((user) => {
-                    setUser(user)
+                r.json().then(() => {
+                    setMessage('Successfully created character')
+                    characterData = {}
                 })
             }
             else{
@@ -87,6 +59,9 @@ function Character({user, setUser}){
         .catch((error) => {
             setMessage(error.message)
         })
+
+        //reset
+        
     }
 
     return(

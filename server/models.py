@@ -45,9 +45,7 @@ class Character(db.Model, SerializerMixin):
     job = db.Column(db.String, nullable=False)
     exp = db.Column(db.Integer, nullable=False)
     level = db.Column(db.Integer, nullable=False)
-    hp = db.Column(db.Integer, nullable=False)
-    atk = db.Column(db.Integer, nullable=False)
-    _def = db.Column(db.Integer, nullable=False)
+
     str = db.Column(db.Integer, nullable=False)
     agi = db.Column(db.Integer, nullable=False)
     vit = db.Column(db.Integer, nullable=False)
@@ -55,6 +53,8 @@ class Character(db.Model, SerializerMixin):
     dex = db.Column(db.Integer, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    game = db.relationship('Game', backref='characters')
 
 
     def to_dict(self):
@@ -64,9 +64,7 @@ class Character(db.Model, SerializerMixin):
             'job': self.job,
             'exp': self.exp,
             'level': self.level,
-            'hp': self.hp,
-            'atk': self.atk,
-            'def': self._def,
+
             'str': self.str,
             'agi': self.agi,
             'vit': self.vit,
@@ -109,7 +107,7 @@ class Monster(db.Model, SerializerMixin):
     atk = db.Column(db.Integer, nullable=False)
     def_ = db.Column(db.Integer, nullable=False)
 
-    dungeon_type = db.Column(db.String, db.ForeignKey('dungeons.type'))
+    dungeon_id = db.Column(db.String, db.ForeignKey('dungeons.id'))
 
     def __repr__(self):
         return '<Monster {}>'.format(self.name)
@@ -120,6 +118,27 @@ class Monster(db.Model, SerializerMixin):
             'name': self.name,
             'type': self.type,
             'exp': self.exp,
+            'hp': self.hp,
+            'atk': self.atk,
+            'def': self.def_
+        }
+    
+class Game(db.Model, SerializerMixin):
+    __tablename__ = 'games'
+
+    id = db.Column(db.Integer, primary_key=True)
+    character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
+    hp = db.Column(db.Integer, nullable=False)
+    atk = db.Column(db.Integer, nullable=False)
+    def_ = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return '<Game {}>'.format(self.id)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'character_id': self.character_id,
             'hp': self.hp,
             'atk': self.atk,
             'def': self.def_

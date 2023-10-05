@@ -4,6 +4,8 @@ from flask_restful import Resource
 from config import app,db,api
 from models import User, Character, Monster, Dungeon
 
+import random
+
 @app.route('/')
 def index():
     return '<h1>Project</h1>'
@@ -71,12 +73,12 @@ class CharacterOption(Resource):
         print(character_dict)
         return character_dict, 200
     
-    def get(self, character_id):
-        character = Character.query.filter_by(id=character_id).first()
-        if not character:
-            return {'message': 'Character not found'}, 404
+    # def get(self, character_id):
+    #     character = Character.query.filter_by(id=character_id).first()
+    #     if not character:
+    #         return {'message': 'Character not found'}, 404
         
-        return character.to_dict(), 200
+    #     return character.to_dict(), 200
     
     def post(self):
         data = request.get_json()
@@ -85,16 +87,14 @@ class CharacterOption(Resource):
         job = data.get('job')
         exp = data.get('exp')
         level = data.get('level')
-        hp = data.get('hp')
-        atk = data.get('atk')
-        _def = data.get('_def')
+
         str = data.get('str')
         agi = data.get('agi')
         vit = data.get('vit')
         int = data.get('int')
         dex = data.get('dex')
 
-        character = Character(name=name, job=job, exp=exp, level=level, hp=hp, atk=atk, _def=_def, str=str, agi=agi, vit=vit, int=int, dex=dex, user_id=session['user_id'])
+        character = Character(name=name, job=job, exp=exp, level=level, str=str, agi=agi, vit=vit, int=int, dex=dex, user_id=session['user_id'])
         character_dict = character.to_dict()
         db.session.add(character)
         db.session.commit()
@@ -111,31 +111,35 @@ class CharacterOption(Resource):
             return {'message': 'Character deleted'}, 200
         else:
             return {'message': 'Not authorized'}, 401
-# class CharacterDelete(Resource):
-#     def delete(self, character_id):
-#         character = Character.query.filter_by(id=character_id).first()
-#         if not character:
-#             return {'message': 'Character not found'}, 404
-        
-#         if character.user_id == session['user_id']:
-#             db.session.delete(character)
-#             db.session.commit()
-#             return {'message': 'Character deleted'}, 200
-#         else:
-#             return {'message': 'Not authorized'}, 401
 
-class Dungeon(Resource):
+class DungeonGet(Resource):
     def get(self):
         dungeon = Dungeon.query.all()
         dungeon_dict = [dungeon.to_dict() for dungeon in dungeon]
+        print(dungeon_dict)
         return dungeon_dict, 200
     
-    def get(self, dungeon_id):
-        dungeon = Dungeon.query.filter_by(id=dungeon_id).first()
-        if not dungeon:
-            return {'message': 'Dungeon not found'}, 404
-        
-        return dungeon.to_dict(), 200
+
+class MonsterGet(Resource):
+    def get(self):
+        monster = Monster.query.all()
+        monster_dict = [monster.to_dict() for monster in monster]
+        print(monster_dict)
+        return monster_dict, 200
+    
+
+class Randomizer(Resource):
+    def get (self):
+        randomDungeon = random.choice(Dungeon.query.all())
+        randomMonster = random.choice(Monster.query.all())
+        print(randomDungeon.to_dict())
+        print(randomMonster.to_dict())
+        if randomDungeon and randomMonster:
+            return {'dungeon': randomDungeon.to_dict(), 'monster': randomMonster.to_dict()}, 200
+        else:
+            return {'message': 'No dungeon or monster found'}, 404
+
+
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')
@@ -143,8 +147,9 @@ api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(CharacterOption, '/character', '/character/<int:character_id>', endpoint='character')
-# api.add_resource(CharacterDelete,'/character/<int:character_id>' , endpoint='character_delete')
-api.add_resource(Dungeon, '/dungeon', '/dungeon/<int:dungeon_id>', endpoint='dungeon')
+api.add_resource(DungeonGet, '/dungeon', endpoint='dungeon')
+api.add_resource(MonsterGet, '/monster', endpoint='monster')
+api.add_resource(Randomizer, '/randomizer', endpoint='randomizer')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

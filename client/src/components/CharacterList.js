@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {Link} from 'react-router-dom'
 
 function CharacterList({user}){
     const [characters, setCharacters] = useState([]);
@@ -49,11 +50,12 @@ function CharacterList({user}){
                     {characters.map((character) => (
                         <p key={character.id}>
                             {character.name} 
-                            <button>Start Game</button>
+                            <Link to={`/game/${character.id}`}><button>Start Game</button></Link>
                             <button onClick={() => deleteCharacter(character.id)}>Delete</button>
                         </p>
                     ))}
                 </ul>): <p>You have no characters. Please create one</p>}
+                {message}
         </div>
         )
 }

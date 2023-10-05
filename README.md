@@ -84,5 +84,8 @@ Created delete function to delete existing character.
 Tested different users, users that has no character caused an error with character.map, made condition to ask user to create their character first.
 
 
-10 - Making dungeon, monster, and updated character models. Seed.py updated to generate random dungeon and monster.
+10 - Making dungeon, monster, and updated character models. Seed.py updated to generate random dungeon and monster. Added logic to calculate hp, atk and def.
+
+11 - Spent a long time trying to find out why Dungeon and Monster can't pull Query, models and app.py had the same class, changed to DungeonGet and MonsterGet instead. useParams to pull character id for Game.js
+
 </details>

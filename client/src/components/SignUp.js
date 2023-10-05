@@ -22,7 +22,7 @@ function SignUp ({setUser}){
         }).then((r) => {
             if (r.ok) {
                 r.json().then((user) => {
-                    setUser(user)
+                    // setUser(user)
                     setMessage('Successfully created account')
                 })
             }else{
