@@ -23,7 +23,7 @@ function Game({user}){
                 setMessage(error.message)
             })
         }
-        if(characterId){
+        if(user && characterId){
             fetch(`/character/${characterId}`, {
                 method: 'GET',
                 headers: {
@@ -32,7 +32,7 @@ function Game({user}){
             })
             .then((r) => r.json())
             .then((r) => {
-                setCharacter(r)                
+                setCharacter(r.name)                
             })
             .catch((error) => {
                 setMessage(error.message)
@@ -73,23 +73,41 @@ function Game({user}){
             setDef(_def+(1.5*character.vit)+(2*character.agi)+(2*character.int)+(1.5*character.int)+(1*character.dex))
         }
 
+        let gameData = {hp, atk, _def, user_id: user.id};
+
         fetch(`/game/${characterId}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(gameData)
+        }).then((r) => {
+            if (r.ok) {
+                r.json().then(() => {
+                    setMessage('Successfully created game')
+                    gameData = {}
+                })
+            }
+            else{
+                r.json().then((error) => setMessage(error.message))
             }
         })
-        
+        .catch((error) => {
+            setMessage(error.message)
+        })
+
     }
-    
 
 
     return (
         <div>
             <h1>Game Start</h1>
-            <button>Start</button>
+            <h1>Character: {characterId}</h1>
+            <h2>{character}</h2>
+            <button onClick={handleStart}>Start</button>
             <h2>Dungeon: {dungeon.name}</h2>
             <h2>Monster: {monster.name}</h2>
+
 
             {message}
 

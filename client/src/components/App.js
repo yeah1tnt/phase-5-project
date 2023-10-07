@@ -38,7 +38,7 @@ function App() {
                 <Route exact path='/login' element={<Login setUser={setUser}/>} />
                 <Route exact path='/character' element={<Character user={user} setUser={setUser}/>} />
                 <Route exact path='/characterList' element={<CharacterList user={user} setUser={setUser}/>} />
-                <Route exact path="/game/:id" element={<Game user={user}/>} />
+                <Route exact path="/game/:characterId" element={<Game user={user}/>} />
             </Routes>
 
         </div>

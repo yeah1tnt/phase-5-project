@@ -2,7 +2,7 @@ from flask import request, session
 from flask_restful import Resource
 
 from config import app,db,api
-from models import User, Character, Monster, Dungeon
+from models import User, Character, Monster, Dungeon, Game
 
 import random
 
@@ -61,24 +61,38 @@ class Logout(Resource):
     
 class CharacterOption(Resource):
 
-    def get(self):
-        if not session['user_id']:
-            return {'message': 'Not authorized'}, 401
-        user_id = session['user_id']
-        character = Character.query.filter_by(user_id=user_id).all()
-        if not character:
-            return {'message': 'No characters found'}, 404
-
-        character_dict = [character.to_dict() for character in character]
-        print(character_dict)
-        return character_dict, 200
-    
-    # def get(self, character_id):
-    #     character = Character.query.filter_by(id=character_id).first()
+    # def get(self):
+    #     if not session['user_id']:
+    #         return {'message': 'Not authorized'}, 401
+    #     user_id = session['user_id']
+    #     character = Character.query.filter_by(user_id=user_id).all()
     #     if not character:
-    #         return {'message': 'Character not found'}, 404
+    #         return {'message': 'No characters found'}, 404
+
+    #     character_dict = [character.to_dict() for character in character]
+    #     print(character_dict)
+    #     return character_dict, 200
+    
+    def get(self, character_id = None):
+        if character_id == None:
+            if not session['user_id']:
+                return {'message': 'Not authorized'}, 401
+            user_id = session['user_id']
+            character = Character.query.filter_by(user_id=user_id).all()
+            if not character:
+                return {'message': 'No characters found'}, 404
+
+            character_dict = [character.to_dict() for character in character]
+            print(character_dict)
+            return character_dict, 200
         
-    #     return character.to_dict(), 200
+        character = Character.query.filter_by(id=character_id).first()
+        character_dict = character.to_dict()
+        print(character_dict)
+        if not character:
+            return {'message': 'Character not found'}, 404
+        
+        return character_dict, 200
     
     def post(self):
         data = request.get_json()
@@ -140,6 +154,22 @@ class Randomizer(Resource):
             return {'message': 'No dungeon or monster found'}, 404
 
 
+class GameUpdate(Resource):
+    def post(self):
+        data = request.get_json()
+        hp = data.get('hp')
+        atk = data.get('atk')
+        def_ = data.get('def')
+        
+        game = Game(character_id=session['user_id'], hp=hp, atk=atk, def_=def_)
+        game_dict = game.to_dict()
+        print(game_dict)
+        db.session.add(game)
+        db.session.commit()
+
+        return game_dict, 201
+    
+    
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')
@@ -150,6 +180,7 @@ api.add_resource(CharacterOption, '/character', '/character/<int:character_id>',
 api.add_resource(DungeonGet, '/dungeon', endpoint='dungeon')
 api.add_resource(MonsterGet, '/monster', endpoint='monster')
 api.add_resource(Randomizer, '/randomizer', endpoint='randomizer')
+api.add_resource(GameUpdate, '/game/:character_id', endpoint='game')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
