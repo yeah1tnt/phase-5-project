@@ -105,7 +105,7 @@ class Monster(db.Model, SerializerMixin):
     exp = db.Column(db.Integer, nullable=False)
     hp = db.Column(db.Integer, nullable=False)
     atk = db.Column(db.Integer, nullable=False)
-    def_ = db.Column(db.Integer, nullable=False)
+    red = db.Column(db.Integer, nullable=False)
 
     dungeon_id = db.Column(db.String, db.ForeignKey('dungeons.id'))
 
@@ -120,7 +120,7 @@ class Monster(db.Model, SerializerMixin):
             'exp': self.exp,
             'hp': self.hp,
             'atk': self.atk,
-            'def': self.def_
+            'red': self.red
         }
     
 class Game(db.Model, SerializerMixin):
@@ -130,7 +130,7 @@ class Game(db.Model, SerializerMixin):
     character_id = db.Column(db.Integer, db.ForeignKey('characters.id'))
     hp = db.Column(db.Integer, nullable=False)
     atk = db.Column(db.Integer, nullable=False)
-    def_ = db.Column(db.Integer, nullable=False)
+    red = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<Game {}>'.format(self.id)
@@ -141,5 +141,5 @@ class Game(db.Model, SerializerMixin):
             'character_id': self.character_id,
             'hp': self.hp,
             'atk': self.atk,
-            'def': self.def_
+            'red': self.red
         }

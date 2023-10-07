@@ -26,10 +26,10 @@ with app.app_context():
     print('Completed')
 
     print('Creating monster')
-    for i in range(20):
+    for i in range(50):
         name = fake.name()
         type = ['Fire', 'Ice', 'Wind', 'Earth']
-        monster = Monster(name=name, type=type[randint(0, 3)], exp=randint(5, 100), hp=randint(1, 100), atk=randint(1, 10), def_=randint(1, 10), dungeon_id = randint(1, len(Dungeon.query.all())))
+        monster = Monster(name=name, type=type[randint(0, 3)], exp=randint(5, 100), hp=randint(1, 100), atk=randint(1, 10), red=randint(1, 10), dungeon_id = randint(1, len(Dungeon.query.all())))
         db.session.add(monster)
         db.session.commit()
     print('Completed')

@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import Battle from "./Battle";
 function Game({user}){
     const {characterId} = useParams();
     const [character, setCharacter] = useState('');
     const [dungeon, setDungeon] = useState('');
-    const [monster, setMonster] = useState('');
     const [message, setMessage] = useState('');
-    const [hp, setHp] = useState(0);
-    const [atk, setAtk] = useState(0);
-    const [_def, setDef] = useState(0);
+    const [hp, setHp] = useState(1);
+    const [atk, setAtk] = useState(1);
+    const [red, setRed] = useState(1);
+    const [gameStart, setGameStart] = useState(false);
 
 
     useEffect(() => {
         if(user){
-            fetch('/randomizer')
+            fetch('/dungeonrandomizer')
             .then((r) => r.json())
             .then((r) => {
-                setDungeon(r.dungeon)
-                setMonster(r.monster)
+                setDungeon(r)
+                console.log(r)
             })
             .catch((error) => {
                 setMessage(error.message)
@@ -32,48 +34,69 @@ function Game({user}){
             })
             .then((r) => r.json())
             .then((r) => {
-                setCharacter(r.name)                
+                setCharacter(r)
+                            
             })
             .catch((error) => {
                 setMessage(error.message)
             })
 
         }
-    }, [user, characterId]);
-    const handleStart = (e) => {
-        e.preventDefault();
+        fetch(`/game/${characterId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
 
+        })
+        .then((r) => r.json())
+        .then((r) => {
+            setMessage(r.message)
+        })
+        
+    }, [user, characterId]);
+
+    const handleStart = async (e) => {
+        e.preventDefault();
+        
+        let newHp = 1
+        let newAtk = 1
+        let newRed = 1
         if(character.job === 'Warrior'){
-            setHp(hp+(1.5*character.str)+(1.2*character.agi)+(2*character.vit)+(1*character.int)+(1.5*character.dex))
-            setAtk(atk+(2*character.str)+(1.2*character.agi)+(1*character.vit)+(1*character.int)+(1.5*character.dex))
-            setDef(_def+(2*character.str)+(1.5*character.agi)+(1.5*character.vit)+(1.5*character.int)+(1*character.dex))
+            newHp = hp+(1.5*character.str)+(1.2*character.agi)+(2*character.vit)+(1*character.int)+(1.5*character.dex)
+            newAtk = atk+(atk+(2*character.str)+(1.2*character.agi)+(1*character.vit)+(1*character.int)+(1.5*character.dex))
+            newRed = red+(red+(2*character.str)+(1.5*character.agi)+(1.5*character.vit)+(1.5*character.int)+(1*character.dex))
         }
     
         if(character.job === 'Assassin'){
-            setHp(hp+(1.2*character.str)+(1.5*character.agi)+(2*character.vit)+(1*character.int)+(1.2*character.dex))
-            setAtk(atk+(1.5*character.str)+(2*character.agi)+(1*character.vit)+(1*character.int)+(1.5*character.dex))
-            setDef(_def+(1.5*character.str)+(2*character.agi)+(1.5*character.vit)+(1.5*character.int)+(1*character.dex))
+            newHp =(hp+(1.2*character.str)+(1.5*character.agi)+(2*character.vit)+(1*character.int)+(1.2*character.dex))
+            newAtk =(atk+(1.5*character.str)+(2*character.agi)+(1*character.vit)+(1*character.int)+(1.5*character.dex))
+            newRed =(red+(1.5*character.str)+(2*character.agi)+(1.5*character.vit)+(1.5*character.int)+(1*character.dex))
         }
     
         if(character.job === 'Paladin'){
-            setHp(hp+(1.5*character.str)+(1.5*character.agi)+(2.5*character.vit)+(1*character.int)+(1*character.dex))
-            setAtk(atk+(1.5*character.str)+(2*character.agi)+(2*character.vit)+(1.2*character.int)+(1*character.dex))
-            setDef(_def+(1.5*character.str)+(2*character.agi)+(2*character.vit)+(1.5*character.int)+(1*character.dex))
+            newHp =(hp+(1.5*character.str)+(1.5*character.agi)+(2.5*character.vit)+(1*character.int)+(1*character.dex))
+            newAtk =(atk+(1.5*character.str)+(2*character.agi)+(2*character.vit)+(1.2*character.int)+(1*character.dex))
+            newRed =(red+(1.5*character.str)+(2*character.agi)+(2*character.vit)+(1.5*character.int)+(1*character.dex))
         }
             
         if(character.job === 'Mage'){
-            setHp(hp+(1*character.str)+(1.5*character.agi)+(2*character.vit)+(1*character.int)+(1.5*character.dex))
-            setAtk(atk+(1*character.str)+(1*character.agi)+(1*character.vit)+(2*character.int)+(2*character.dex))
-            setDef(_def+(1.5*character.str)+(1.5*character.agi)+(2*character.vit)+(2*character.int)+(1*character.dex))
+            newHp =(hp+(1*character.str)+(1.5*character.agi)+(2*character.vit)+(1*character.int)+(1.5*character.dex))
+            newAtk =(atk+(1*character.str)+(1*character.agi)+(1*character.vit)+(2*character.int)+(2*character.dex))
+            newRed =(red+(1.5*character.str)+(1.5*character.agi)+(2*character.vit)+(2*character.int)+(1*character.dex))
         }
     
         if(character.job === 'Hunter'){
-            setHp(hp+(1.5*character.str)+(1.5*character.agi)+(2*character.vit)+(1*character.int)+(1.5*character.dex))
-            setAtk(atk+(1.5*character.str)+(2*character.agi)+(1*character.vit)+(2*character.int)+(1.5*character.dex))
-            setDef(_def+(1.5*character.vit)+(2*character.agi)+(2*character.int)+(1.5*character.int)+(1*character.dex))
+            newHp =(hp+(1.5*character.str)+(1.5*character.agi)+(2*character.vit)+(1*character.int)+(1.5*character.dex))
+            newAtk =(atk+(1.5*character.str)+(2*character.agi)+(1*character.vit)+(2*character.int)+(1.5*character.dex))
+            newRed =(red+(1.5*character.vit)+(2*character.agi)+(2*character.int)+(1.5*character.int)+(1*character.dex))
         }
+        //these somehow does not work on the first trial. changed hp:newHp istead
+        setHp(newHp);
+        setAtk(newAtk);
+        setRed(newRed);
 
-        let gameData = {hp, atk, _def, user_id: user.id};
+        let gameData = {characterId, hp:newHp, atk:newAtk, red:newRed};
 
         fetch(`/game/${characterId}`, {
             method: 'POST',
@@ -85,7 +108,7 @@ function Game({user}){
             if (r.ok) {
                 r.json().then(() => {
                     setMessage('Successfully created game')
-                    gameData = {}
+                    setGameStart(true)
                 })
             }
             else{
@@ -95,22 +118,21 @@ function Game({user}){
         .catch((error) => {
             setMessage(error.message)
         })
-
+        
     }
 
 
     return (
         <div>
-            <h1>Game Start</h1>
-            <h1>Character: {characterId}</h1>
-            <h2>{character}</h2>
-            <button onClick={handleStart}>Start</button>
+
+            <h1>Character: {character.name}</h1>
             <h2>Dungeon: {dungeon.name}</h2>
-            <h2>Monster: {monster.name}</h2>
+            {!gameStart ? 
+            <button onClick={handleStart}>Start</button> :
+            <Battle user={user} dungeon_id={dungeon.id} character_id={characterId}></Battle>}
+            
 
-
-            {message}
-
+            
         </div>
     )
 }

@@ -142,26 +142,42 @@ class MonsterGet(Resource):
         return monster_dict, 200
     
 
-class Randomizer(Resource):
+class DungeonRandomizer(Resource):
     def get (self):
         randomDungeon = random.choice(Dungeon.query.all())
-        randomMonster = random.choice(Monster.query.all())
         print(randomDungeon.to_dict())
-        print(randomMonster.to_dict())
-        if randomDungeon and randomMonster:
-            return {'dungeon': randomDungeon.to_dict(), 'monster': randomMonster.to_dict()}, 200
+        if randomDungeon:
+            return randomDungeon.to_dict(), 200
         else:
             return {'message': 'No dungeon or monster found'}, 404
 
+class MonsterRandomizer(Resource):
+    def get (self, dungeon_id):
+        randomMonster = random.choice(Monster.query.filter_by(dungeon_id=dungeon_id).all())
+        print(randomMonster.to_dict())
+        if randomMonster:
+            return randomMonster.to_dict(), 200
+        else:
+            return {'message': 'No monster found'}, 404
 
 class GameUpdate(Resource):
-    def post(self):
+
+    def get(self, character_id):
+        game = Game.query.filter_by(character_id=character_id).all()
+        if not game:
+            return {'message': 'Game not found'}, 404
+        
+        game_dict = [game.to_dict() for game in game]
+        print(game_dict)
+        return game_dict, 200
+
+    def post(self, character_id):
         data = request.get_json()
         hp = data.get('hp')
         atk = data.get('atk')
-        def_ = data.get('def')
+        red = data.get('red')
         
-        game = Game(character_id=session['user_id'], hp=hp, atk=atk, def_=def_)
+        game = Game(character_id=character_id, hp=hp, atk=atk, red = red)
         game_dict = game.to_dict()
         print(game_dict)
         db.session.add(game)
@@ -169,9 +185,17 @@ class GameUpdate(Resource):
 
         return game_dict, 201
     
+    def delete(self, character_id):
+        game = Game.query.filter_by(character_id=character_id).all()
+        if not game:
+            return {'message': 'Game not found'}, 404
+        
+        for game in game:
+            db.session.delete(game)
+        db.session.commit()
+        return {'message': 'Game deleted'}, 200
     
-
-
+    
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
@@ -179,8 +203,9 @@ api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(CharacterOption, '/character', '/character/<int:character_id>', endpoint='character')
 api.add_resource(DungeonGet, '/dungeon', endpoint='dungeon')
 api.add_resource(MonsterGet, '/monster', endpoint='monster')
-api.add_resource(Randomizer, '/randomizer', endpoint='randomizer')
-api.add_resource(GameUpdate, '/game/:character_id', endpoint='game')
+api.add_resource(DungeonRandomizer, '/dungeonrandomizer', endpoint='dungeon_randomizer')
+api.add_resource(MonsterRandomizer, '/monsterrandomizer/<int:dungeon_id>', endpoint='monster_randomizer')
+api.add_resource(GameUpdate, '/game/<int:character_id>', endpoint='game')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

@@ -50,7 +50,7 @@ function CharacterList({user}){
                     {characters.map((character) => (
                         <p key={character.id}>
                             {character.name} 
-                            <Link to={`/game/${character.id}`}><button>Start Game</button></Link>
+                            <Link to={`/game/${character.id}`}><button>Choose</button></Link>
                             <button onClick={() => deleteCharacter(character.id)}>Delete</button>
                         </p>
                     ))}
