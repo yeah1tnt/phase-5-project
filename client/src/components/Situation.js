@@ -192,7 +192,7 @@ function Situation({dungeon_id, isSituation}){
                         checked={choice === '4'}
                         onChange={(e) => setChoice(e.target.value)}
                     />
-                    2: {situation.choice_4}
+                    4: {situation.choice_4}
                 </label>): null}
 
             </div>
