@@ -12,7 +12,6 @@ function Game({user}){
     const [red, setRed] = useState(1);
     const [gameStart, setGameStart] = useState(false);
 
-
     useEffect(() => {
         if(user){
             fetch('/dungeonrandomizer')
@@ -131,6 +130,7 @@ function Game({user}){
             <button onClick={handleStart}>Start</button> :
             <Battle user={user} dungeon_id={dungeon.id} dungeon_level = {dungeon.level} character_id={characterId}></Battle>}
             {/* {message ? <p>{message}</p> : null} */}
+            
 
             
         </div>

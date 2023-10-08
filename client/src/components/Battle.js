@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 
-import Game from "./Game";
+import Situation from "./Situation";
 
 function Battle({user, dungeon_id, dungeon_level, character_id}){
     // const {dungeonId} = useParams();
@@ -24,6 +24,13 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
     const [allocatePts, setAllocatePts] = useState({str:0, agi:0, vit:0, int:0, dex:0})
 
     const [updateEffect, setUpdateEffect] = useState(false)
+
+    const [end, setEnd] = useState(false)
+    const [endSituation, setEndSituation] = useState(false)
+
+    const [isSituation, setIsSituation] = useState(false)
+
+
 
 
     const [hp] = useState(1);
@@ -114,11 +121,17 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             else if(newCharacterHp <= 0){
                 setIsOver(true)
                 setMessage(message + '\nYou died!')
+                setEnd(true)
             }
             
         }
     }
     const nextBattle = () => {
+        let randomTemp = Math.floor(Math.random() * 100) + 1;
+        if (randomTemp > 1){
+            setIsSituation(true)
+            // setIsSituation(false)
+        }
         if (battleCount !== dungeonLevel){
             fetch(`/monsterrandomizer/${dungeonId}`)
             .then((r) => r.json())
@@ -266,6 +279,10 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
 
         
     }
+
+    const handleEndSituation = () => {
+        setIsSituation(false)
+    }
     
     return (
         <div>
@@ -278,12 +295,22 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             <p>Monster: {monster.name}</p>
             <p>Monster Hp: {monster.hp}</p>
             
-            
-            <button onClick={handleAttack} disabled={isOver || isLeveledUp}>Attack</button>
+            {!isOver ?
+            <button onClick={handleAttack} disabled={isOver || isLeveledUp || isSituation}>Attack</button>:
+            null
+            }
 
-            {dungeon_level - battleCount === 0 ? 
-            <button onClick={nextDungeon} disabled={!isOver}>Next dungeon</button> : 
-            <button onClick={nextBattle} disabled={!isOver || isLeveledUp}>Next Battle</button>}
+            
+            {isSituation ? 
+            <Situation dungeon_id={dungeonId} isSituation={isSituation}></Situation> : 
+            (dungeon_level - battleCount === 0 ? 
+                (<button onClick={nextDungeon} disabled={!isOver}>Next dungeon</button>) : 
+                (<button onClick={nextBattle} disabled={!isOver || isLeveledUp || end}>Next Battle</button>))
+            }
+            
+            {isSituation ? <button onClick={handleEndSituation}>End Situation</button> : null}
+
+            
             
 
             {isLeveledUp ? 
@@ -304,6 +331,8 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             <pre>{message}</pre>
             
         </div>
+
+        
     )
 }
 
