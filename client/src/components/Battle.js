@@ -1,16 +1,22 @@
 import React, {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
-function Battle({user, dungeon_id, character_id}){
+
+function Battle({user, dungeon_id, dungeon_level, character_id}){
     // const {dungeonId} = useParams();
     const [character, setCharacter] = useState('')
     const [monster, setMonster] = useState('')
+    const [dungeonId, setDungeonId] = useState(dungeon_id)
+    const [dungeonLevel, setDungeonLevel] = useState(dungeon_level)
+    const [dungeon, setDungeon] = useState('')
     const [message, setMessage] = useState('')
     const [isOver, setIsOver] = useState(false)
+    const [battleCount, setBattleCount] = useState(0)
+    const [totalBattleCount, setTotalBattleCount] = useState(0)
+    const [dungeonCount, setDungeonCount] = useState(3)
 
 
     useEffect(() => {
         if(user){
-            fetch(`/monsterrandomizer/${dungeon_id}`)
+            fetch(`/monsterrandomizer/${dungeonId}`)
             .then((r) => r.json())
             .then((r) => {
                 setMonster(r)
@@ -34,7 +40,7 @@ function Battle({user, dungeon_id, character_id}){
         })
         }
         
-    }, [user, dungeon_id, character_id]);
+    }, [user, character_id]);
 
 
     let monsterHp = monster.hp;
@@ -63,27 +69,68 @@ function Battle({user, dungeon_id, character_id}){
 
             setMonster({...monster, hp: newMonsterHp})
             setCharacter({...character, hp: newCharacterHp})
+
+            setMessage(`You attacked the monster for ${characterDamage} damage. The monster attacked you for ${monsterDamage} damage.`)
             
             if(newMonsterHp <= 0){
                 setIsOver(true)
-                setMessage('You won!')
+                setTotalBattleCount(totalBattleCount + 1)
+                setBattleCount(battleCount + 1)
+                setMessage(message + '\nYou won!')
             }
             else if(newCharacterHp <= 0){
                 setIsOver(true)
-                setMessage('You died!')
+                setMessage(message + '\nYou died!')
             }
+
+            
         }
+    }
+
+    const nextBattle = () => {
+        if (battleCount !== dungeonLevel){
+            fetch(`/monsterrandomizer/${dungeonId}`)
+            .then((r) => r.json())
+            .then((r) => {
+                setMonster(r)
+            })
+        }
+
+        setIsOver(false)
+
+    }
+
+    const nextDungeon = () => {
+        fetch(`/dungeonrandomizer`)
+        .then((r) => r.json())
+        .then((r) => {
+            setDungeon(r)
+            setDungeonId(r.id)
+            setDungeonLevel(r.level)
+        })
+        setIsOver(false)
+        setBattleCount(0)
+        setDungeonCount(dungeonCount - 1)
     }
     
     return (
         <div>
             <h1>Battle</h1>
+            <p>Total battle: {totalBattleCount}</p>
+            <p>Battle left: {dungeonLevel - battleCount}</p>
+
             <p>Character HP: {character.hp}</p>
             <p>Monster: {monster.name}</p>
             <p>Hp: {monster.hp}</p>
             
+            
             <button onClick={handleAttack} disabled={isOver}>Attack</button>
-            <p>{message}</p>
+            {dungeon_level - battleCount === 0 ? 
+            <button onClick={nextDungeon} disabled={!isOver}>Next dungeon</button> : 
+            <button onClick={nextBattle} disabled={!isOver}>Next Battle</button>}
+            
+            
+            <pre>{message}</pre>
 
         </div>
     )

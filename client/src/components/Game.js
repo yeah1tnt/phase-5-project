@@ -129,8 +129,8 @@ function Game({user}){
             <h2>Dungeon: {dungeon.name}</h2>
             {!gameStart ? 
             <button onClick={handleStart}>Start</button> :
-            <Battle user={user} dungeon_id={dungeon.id} character_id={characterId}></Battle>}
-            
+            <Battle user={user} dungeon_id={dungeon.id} dungeon_level = {dungeon.level} character_id={characterId}></Battle>}
+            {/* {message ? <p>{message}</p> : null} */}
 
             
         </div>

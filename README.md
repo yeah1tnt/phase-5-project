@@ -90,6 +90,6 @@ Tested different users, users that has no character caused an error with charact
 
 12 - Troubleshoot and brainstorming how to keep gameUpdated. Kinda tuned Game.js, start button would calculate stat of character and put it in game session.
 
-13 - Create battle.js. Randomize monster in that the dungeon picked when character is chosen
+13 - Create battle.js. Randomize monster in that the dungeon picked when character is chosen. Damage calculation for both character and monster.
 
 </details>
