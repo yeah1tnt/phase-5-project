@@ -94,6 +94,25 @@ class CharacterOption(Resource):
         
         return character_dict, 200
     
+    def put(self, character_id):
+        data = request.get_json()
+
+        character = Character.query.filter_by(id=character_id).first()
+        
+        character.exp = data.get('exp')
+        character.level = data.get('level')
+
+        character.str = data.get('str')
+        character.agi = data.get('agi')
+        character.vit = data.get('vit')
+        character.int = data.get('int')
+        character.dex = data.get('dex')
+
+        db.session.commit()
+
+        return character.to_dict(), 200
+
+
     def post(self):
         data = request.get_json()
 
@@ -170,6 +189,19 @@ class GameUpdate(Resource):
         game_dict = [game.to_dict() for game in game]
         print(game_dict)
         return game_dict, 200
+    
+    def put(self, character_id):
+        data = request.get_json()
+
+        game = Game.query.filter_by(character_id=character_id).first()
+
+        game.hp = data.get('hp')
+        game.atk = data.get('atk')
+        game.red = data.get('red')
+        db.session.commit()
+
+        return game.to_dict(), 200
+        
 
     def post(self, character_id):
         data = request.get_json()

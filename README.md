@@ -92,4 +92,8 @@ Tested different users, users that has no character caused an error with charact
 
 13 - Create battle.js. Randomize monster in that the dungeon picked when character is chosen. Damage calculation for both character and monster.
 
+14 - After defeating a monster. The character will gain exp. This exp will be added to the character.exp and a logic to level them up should be in place. 
+Added new dungeon when all level in a dungeon is gone.
+When character reach a certain xp, level up screen will pop up to choose 3 stats to level up.
+
 </details>
