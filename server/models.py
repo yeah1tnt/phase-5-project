@@ -85,6 +85,7 @@ class Dungeon(db.Model, SerializerMixin):
     type = db.Column(db.String, nullable=False)
 
     monsters = db.relationship('Monster', backref='dungeons')
+    situation = db.relationship('Situation', backref='dungeons')
 
     def __repr__(self):
         return '<Dungeon {}>'.format(self.name)
@@ -142,4 +143,30 @@ class Game(db.Model, SerializerMixin):
             'hp': self.hp,
             'atk': self.atk,
             'red': self.red
+        }
+    
+class Situation(db.Model, SerializerMixin):
+    __tablename__ = 'situations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    situation = db.Column(db.String, nullable=False)
+    choice_1 = db.Column(db.String, nullable=False)
+    choice_2 = db.Column(db.String, nullable=False)
+    choice_3 = db.Column(db.String, nullable=False)
+    choice_4 = db.Column(db.String, nullable=False)
+
+    dungeon_id = db.Column(db.String, db.ForeignKey('dungeons.id'))
+
+
+    def __repr__(self):
+        return '<Situation {}>'.format(self.id)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'situation': self.situation,
+            'choice_1': self.choice_1,
+            'choice_2': self.choice_2,
+            'choice_3': self.choice_3,
+            'choice_4': self.choice_4
         }

@@ -20,7 +20,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
     const [isOver, setIsOver] = useState(false)
     const [isLeveledUp, setIsLeveledUp] = useState(false)
 
-    const [availablePoints, setAvailablePoints] = useState(3)
+    const [availablePoints, setAvailablePoints] = useState(2)
     const [allocatePts, setAllocatePts] = useState({str:0, agi:0, vit:0, int:0, dex:0})
 
     const [updateEffect, setUpdateEffect] = useState(false)
@@ -113,15 +113,11 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             }
             else if(newCharacterHp <= 0){
                 setIsOver(true)
-                
                 setMessage(message + '\nYou died!')
             }
-
-            
             
         }
     }
-
     const nextBattle = () => {
         if (battleCount !== dungeonLevel){
             fetch(`/monsterrandomizer/${dungeonId}`)

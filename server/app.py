@@ -2,7 +2,7 @@ from flask import request, session
 from flask_restful import Resource
 
 from config import app,db,api
-from models import User, Character, Monster, Dungeon, Game
+from models import User, Character, Monster, Dungeon, Game, Situation
 
 import random
 
@@ -227,7 +227,19 @@ class GameUpdate(Resource):
         db.session.commit()
         return {'message': 'Game deleted'}, 200
     
+class SituationList(Resource):
+    def get(self, dungeon_id):
+        if dungeon_id:
+            situation = Situation.query.filter_by(dungeon_id=dungeon_id).all()
+            situation_dict = [situation.to_dict() for situation in situation]
+            print(situation_dict)
+            return situation_dict, 200
+        else:
+            return {'message': 'No situation in dungeon'}, 404
     
+
+
+
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
@@ -238,6 +250,7 @@ api.add_resource(MonsterGet, '/monster', endpoint='monster')
 api.add_resource(DungeonRandomizer, '/dungeonrandomizer', endpoint='dungeon_randomizer')
 api.add_resource(MonsterRandomizer, '/monsterrandomizer/<int:dungeon_id>', endpoint='monster_randomizer')
 api.add_resource(GameUpdate, '/game/<int:character_id>', endpoint='game')
+api.add_resource(SituationList, '/situation/<int:dungeon_id>', endpoint='situation')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
