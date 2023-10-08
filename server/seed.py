@@ -67,7 +67,7 @@ with app.app_context():
     db.session.add(situationAdd)
     db.session.commit()
 
-    situation = 'Within the cave, you heard chanting in the in the darkness. You recognized the language, it''s an ancient lost tribe infamous for their magic. What do you do?'
+    situation = 'Within the cave, you heard chanting in the in the darkness. You recognized the language, it is an ancient lost tribe infamous for their magic. What do you do?'
     choice_1 = 'Befriend them'
     choice_2 = 'Attack them'
     choice_3 = 'Steal their magic book'

@@ -228,7 +228,12 @@ class GameUpdate(Resource):
         return {'message': 'Game deleted'}, 200
     
 class SituationList(Resource):
-    def get(self, dungeon_id):
+    def get(self, dungeon_id=None):
+        if dungeon_id == None:
+            situation = Situation.query.all()
+            situation_dict = [situation.to_dict() for situation in situation]
+            print(situation_dict)
+            return situation_dict, 200
         if dungeon_id:
             situation = Situation.query.filter_by(dungeon_id=dungeon_id).all()
             situation_dict = [situation.to_dict() for situation in situation]
@@ -250,7 +255,7 @@ api.add_resource(MonsterGet, '/monster', endpoint='monster')
 api.add_resource(DungeonRandomizer, '/dungeonrandomizer', endpoint='dungeon_randomizer')
 api.add_resource(MonsterRandomizer, '/monsterrandomizer/<int:dungeon_id>', endpoint='monster_randomizer')
 api.add_resource(GameUpdate, '/game/<int:character_id>', endpoint='game')
-api.add_resource(SituationList, '/situation/<int:dungeon_id>', endpoint='situation')
+api.add_resource(SituationList, '/situation', '/situation/<int:dungeon_id>', endpoint='situation')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

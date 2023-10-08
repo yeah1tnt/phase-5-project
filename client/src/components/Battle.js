@@ -128,7 +128,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
     }
     const nextBattle = () => {
         let randomTemp = Math.floor(Math.random() * 100) + 1;
-        if (randomTemp > 1){
+        if (randomTemp >= 75){
             setIsSituation(true)
             // setIsSituation(false)
         }
@@ -142,6 +142,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
 
         setIsOver(false)
         levelManagement()
+        setMessage('A new battle begins')
 
     }
 
@@ -156,6 +157,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
         setIsOver(false)
         setBattleCount(0)
         setDungeonCount(dungeonCount - 1)
+        setMessage('You entered a new dungeon')
     }
 
     const levelManagement = () => {
@@ -294,6 +296,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             <p>Character EXP: {characterExp}</p>
             <p>Monster: {monster.name}</p>
             <p>Monster Hp: {monster.hp}</p>
+            <pre>{message}</pre>
             
             {!isOver ?
             <button onClick={handleAttack} disabled={isOver || isLeveledUp || isSituation}>Attack</button>:
@@ -308,7 +311,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
                 (<button onClick={nextBattle} disabled={!isOver || isLeveledUp || end}>Next Battle</button>))
             }
             
-            {isSituation ? <button onClick={handleEndSituation}>End Situation</button> : null}
+            {isSituation ? <button onClick={handleEndSituation}>Continue</button> : null}
 
             
             
@@ -328,7 +331,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             
             null}
             
-            <pre>{message}</pre>
+            
             
         </div>
 
