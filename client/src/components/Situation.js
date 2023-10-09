@@ -35,6 +35,7 @@ function Situation({dungeon_id, isSituation}){
 
     const handleChoice = (e) => {
         e.preventDefault();
+        setIsButtonClicked(true);
         situation_1()
         situation_2()
         situation_3()
@@ -42,7 +43,7 @@ function Situation({dungeon_id, isSituation}){
         situation_5()
         situation_6()
         isSituation = false;
-        setIsButtonClicked(true);
+        
     }
 
     
@@ -124,18 +125,14 @@ function Situation({dungeon_id, isSituation}){
     }
 
     const situation_6 = () => {
-        if(situation.id === '6'){
+        if(situation.id === 6){
             if(choice === '1'){
-                console.log('Test61')
                 return (<h3>You heard some rustling inside the house, the door slowly opened and you saw an old man, he invited you to eat with him. (vit + 3)</h3>)
             }else if(choice === '2'){
-                console.log('Test62')
                 return(<h3>You slowly pushes the door open and sneak inside, you took all of the resident's valuable (dex + 1 and gold + 25)</h3>)
             }else if(choice === '3'){
-                console.log('Test63')
                 return(<h3>The door flew open, but there is nothing inside. Look like it was enchanted with a magic spell to protect its inhabitant, you walk away empty handed</h3>)
             }else{
-                console.log('Test64')
                 return(<h3>Not really sure why you did this, but the people inside probably was very confused</h3>)
             }
         }

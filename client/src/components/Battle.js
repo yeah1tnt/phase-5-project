@@ -128,7 +128,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
     }
     const nextBattle = () => {
         let randomTemp = Math.floor(Math.random() * 100) + 1;
-        if (randomTemp >= 75){
+        if (randomTemp >= 30){
             setIsSituation(true)
             // setIsSituation(false)
         }
@@ -297,7 +297,7 @@ function Battle({user, dungeon_id, dungeon_level, character_id}){
             <p>Monster: {monster.name}</p>
             <p>Monster Hp: {monster.hp}</p>
             <pre>{message}</pre>
-            
+
             {!isOver ?
             <button onClick={handleAttack} disabled={isOver || isLeveledUp || isSituation}>Attack</button>:
             null
