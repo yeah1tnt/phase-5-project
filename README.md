@@ -1,10 +1,68 @@
-# phase-5-project
+# Yealt's Simulated Universe
+
+## Overview
+
+I have been playing a lot of Baldur's Gate and Honkai: Star Rail (and still do) so I decided to have my project around character building.
+
+This project is a game where user can make their own account and log in. Only character created by the users can be use and other users cannot see other people's character.
+
+Character enter different dungeon and battle through different enemy, levelling up and making different choices with different situation
+
+## Installation
+
+You will need to install python environment and react
+```
+pipenv install
+npm install --prefix client
+```
+
+To run the project. In console type in the following command to start up the front end. Open up app.py to start up the backend.
+
+```
+npm start --prefix client
+```
+
+## Logs
 
 
 
-
-### Logs
 <details>
+
+```
+├── LICENSE
+├── Pipfile
+├── Pipfile.lock
+├── README.md
+├── client
+│   ├── README.md
+│   ├── node_modules
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   └── src
+│       ├── App.css
+│       ├── components
+│       │   ├── App.js
+│       │   ├── Battle.js
+│       │   ├── Character.js
+│       │   ├── CharacterList.js
+│       │   ├── Game.js
+│       │   ├── Home.js
+│       │   ├── Login.js
+│       │   ├── SignUp.js
+│       │   └── Situation.js
+│       ├── index.css
+│       └── index.js
+└── server
+    ├── __pycache__
+    ├── app.py
+    ├── config.py
+    ├── instance
+    ├── migrations
+    ├── models.py
+    └── seed.py
+```
+
 1 - Install python environment based on project template
 
 ```
@@ -19,7 +77,7 @@ npx create-react-app- client --use-npm
 for client folder, create react environment. PORT=4000 for scripts start.
 
 3 - Setting up users login first, ```pipenv install flask_bcrypt``` to encrypt password. Set up models for Users and initialized the database.
-```python
+```
 flask db init
 flask db revision --autogenerate -m"message"
 flask db upgrade
